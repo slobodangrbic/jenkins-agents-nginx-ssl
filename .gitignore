@@ -1,5 +1,6 @@
-docker_id_rsa
-docker_id_rsa.pub
-postman_id_rsa
-postman_id_rsa.pub
-nginx.conf
+/docker_id_rsa
+/docker_id_rsa.pub
+/postman_id_rsa
+./postman_id_rsa.pub
+./nginx.conf
+./keys
