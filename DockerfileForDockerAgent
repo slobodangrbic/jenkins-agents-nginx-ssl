@@ -1,0 +1,42 @@
+FROM jenkins/ssh-agent:latest-jdk11 AS base
+
+ARG HOST_GID
+ARG HOST_UID
+
+# Install Docker CLI
+RUN apt-get update && \
+    apt-get install -y \
+        curl \
+        wget \
+        gpg \
+        apt-transport-https \
+        ca-certificates \
+        gnupg-agent \
+        software-properties-common && \
+    install -m 0755 -d /etc/apt/keyrings
+
+# Add Docker’s official GPG key
+RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg && \
+    chmod a+r /etc/apt/keyrings/docker.gpg
+
+# Set up the Docker repository
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+# Install Docker Engine
+RUN apt-get update && \
+    apt-get install -y docker-ce docker-ce-cli containerd.io
+
+# Update user and group settings
+RUN usermod -u $HOST_UID jenkins && \
+    echo "jenkins:jenkins" | chpasswd && \
+    echo "root:root" | chpasswd && \
+    echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Update Docker group if necessary
+RUN groupmod -g $HOST_GID docker || echo 'Group already exists' && \
+    usermod -aG docker jenkins
+
+# Clean up unnecessary permissions changes
+RUN chmod -R 755 /etc/environment /etc/ssh
+
+USER jenkins

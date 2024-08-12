@@ -1,0 +1,43 @@
+FROM jenkins/ssh-agent:latest-jdk11 AS base
+
+ARG HOST_GID
+ARG HOST_UID
+
+# Update and install required packages in one step
+RUN apt-get update && \
+    apt-get install -y \
+        curl \
+        wget \
+        gpg \
+        apt-transport-https \
+        ca-certificates \
+        gnupg-agent \
+        software-properties-common \
+        sudo && \
+    install -m 0755 -d /etc/apt/keyrings
+
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
+    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
+    apt-get update && \
+    apt-get install -y nodejs nano
+
+# Install Newman and dependencies
+WORKDIR /etc/newman
+RUN curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh && \
+    npm install -g newman newman-reporter-junitfull newman-reporter-htmlextra newman-reporter-slackmsg ajv
+
+# Set permissions for Jenkins user
+RUN touch /home/jenkins/.ssh/authorized_keys && \
+    chown -R jenkins:jenkins /home/jenkins && \
+    chmod 750 /home/jenkins && \
+    chmod 700 /home/jenkins/.ssh && \
+    chmod 600 /home/jenkins/.ssh/authorized_keys
+
+# Remove unnecessary permissions changes and clean up
+RUN chmod -R 777 /etc/environment /etc/ssh && \
+    npm -v
+
+USER jenkins
+
+WORKDIR /home/jenkins

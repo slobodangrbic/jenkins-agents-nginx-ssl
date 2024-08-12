@@ -1,0 +1,81 @@
+services:
+  docker-slave-node:
+    container_name: jenkins-docker-node
+    privileged: true
+    user: jenkins
+    build:
+      context: .
+      dockerfile: DockerfileForDockerAgent
+    restart: unless-stopped
+    ports:
+      - "2223:22"
+    environment:
+      - SSH_PRIVATE_KEY=${POSTMAN_SSH_PRIVATE_KEY}
+      - SSH_USER=root
+      - SSH_PORT=22
+    volumes:
+      - ${HOST_DOCKER}:/var/run/docker.sock
+      - docker_slave:/home/jenkins
+    networks:
+      - jenkins
+
+  postman-slave-node:
+    container_name: jenkins-postman-node
+    build:
+      context: .
+      dockerfile: DockerfileForPostmanAgent
+    volumes:
+      - postman_newman:/etc/newman
+      - postman_slave:/home/jenkins
+    privileged: true
+    restart: unless-stopped
+    user: jenkins
+    ports:
+      - "2222:22"
+    environment:
+      - SSH_PRIVATE_KEY=${POSTMAN_SSH_PRIVATE_KEY}
+      - SSH_USER=root
+      - SSH_PORT=22
+    networks:
+      - jenkins
+
+  jenkins-master-node:
+    container_name: jenkins-master-node
+    build:
+      context: .
+      dockerfile: DockerfileJenkinsMaster
+    env_file:
+      - .env
+    restart: unless-stopped
+    user: jenkins
+    volumes:
+      - jenkins_data:/var/jenkins_home:rw
+    ports:
+      - "51001:8080"
+      - "51002:50000"
+    networks:
+      - jenkins
+    depends_on:
+      - docker-slave-node
+      - postman-slave-node
+
+  nginx:
+    build:
+      context: .
+      dockerfile: DockerfileForNginx
+    container_name: nginx-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - jenkins
+
+volumes:
+  jenkins_data:
+  docker_slave:
+  postman_slave:
+  postman_newman:
+
+networks:
+  jenkins:

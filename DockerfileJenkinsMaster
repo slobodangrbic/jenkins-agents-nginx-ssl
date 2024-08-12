@@ -1,0 +1,31 @@
+FROM jenkins/jenkins:latest
+
+# Arguments
+ARG HOST_GID
+ARG HOST_UID
+ARG AGENT_NAME
+
+# Install required Jenkins plugins
+USER root
+RUN jenkins-plugin-cli --plugins ssh-slaves blueocean
+
+# Install system packages and configure users
+RUN apt-get update && \
+    apt-get install -y \
+        sudo \
+        iputils-ping \
+        cron
+RUN   rm -rf /var/lib/apt/lists/*
+RUN    echo "jenkins:jenkins" | chpasswd 
+RUN    echo "root:root" | chpasswd 
+RUN    echo "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers 
+RUN    mkdir -p /var/lib/jenkins/.ssh 
+RUN    chown -R jenkins:jenkins /var/lib/jenkins/.ssh /var/jenkins_home 
+RUN    chmod -R 777 /var/jenkins_home 
+RUN    mkdir /var/jenkins_home/.ssh
+RUN    touch /var/jenkins_home/.ssh/known_hosts && cd /var/jenkins_home/.ssh && chmod -R 777 /var/jenkins_home/.ssh
+# RUN    ssh-keyscan -H jenkins-docker-node >> known_hosts 
+# RUN    ssh-keyscan -H jenkins-postman-node >> known_hosts
+
+# Switch back to jenkins user
+USER jenkins
