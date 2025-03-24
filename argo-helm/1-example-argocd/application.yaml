@@ -1,0 +1,15 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: my-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/slobodangrbic/jenkins-agent-docker-postman.git
+    targetRevision: HEAD
+    path: kubernetes-udemy-course/KubernetesPractice/Helm-Practice/argo-helm/demo-app
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: prod
