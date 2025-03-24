@@ -7,9 +7,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/slobodangrbic/jenkins-agent-docker-postman.git
+    repoURL: https://github.com/slobodangrbic/jenkins-agents-nginx-ssl.git
     targetRevision: HEAD
-    path: kubernetes-udemy-course/KubernetesPractice/Helm-Practice/argo-helm/demo-app
+    path: argo-helm/demo-app
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: prod
