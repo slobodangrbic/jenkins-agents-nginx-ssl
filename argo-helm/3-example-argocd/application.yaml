@@ -1,0 +1,27 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: apps-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/slobodangrbic/jenkins-agents-nginx-ssl.git
+    targetRevision: HEAD
+    path: argo-helm/environments/dev/apps 
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true 
+      allowEmpty: true
+    syncOptions:
+    - CreateNamespace=true
+    - Validate=true
+    - PruneLast=true
+    - PrunePropagationPolicy=Foreground
