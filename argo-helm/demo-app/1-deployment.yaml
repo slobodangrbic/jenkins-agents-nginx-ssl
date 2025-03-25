@@ -19,6 +19,6 @@ spec:
     spec:
       containers:
         - name: nginx
-          image: slobodang/nginx:1.23.5
+          image: slobodang/nginx:1.23.6
           ports:
             - containerPort: 80
