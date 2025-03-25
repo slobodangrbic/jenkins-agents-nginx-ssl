@@ -3,8 +3,6 @@ kind: Deployment
 metadata:
   name: nginx
   namespace: bar
-  # finalizers:
-  #   - resources-finalizer.argocd.argoproj.io
   labels:
     app: nginx
 spec:
