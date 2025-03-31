@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postman-master
-  namespace: postman
+  namespace: postman-dev
   labels:
-    app: postman
+    app: postman-dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: postman
+      app: postman-dev
   template:
     metadata:
       labels:
-        app: postman
+        app: postman-dev
     spec:
       containers:
-        - name: nginx
+        - name: postman-dev
           image: slobodang/jenkins-postman-slave:latest
           ports:
             - containerPort: 22
