@@ -11,7 +11,7 @@ spec:
   source:
     repoURL: https://github.com/slobodangrbic/jenkins-agents-nginx-ssl.git
     targetRevision: testing
-    path: argo-helm/environments/dev/jenkins-docker-slave
+    path: argo-helm/environments/testing/jenkins-docker-slave
   destination:
     server: 'https://kubernetes.default.svc'
   syncPolicy:
