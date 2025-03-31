@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins-master
-  namespace: jenkins
+  namespace: jenkins-testing
   labels:
-    app: jenkins
+    app: jenkins-testing
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: jenkins
+      app: jenkins-testing
   template:
     metadata:
       labels:
-        app: jenkins
+        app: jenkins-testing
     spec:
       containers:
-        - name: nginx
+        - name: jenkins-testing
           image: slobodang/jenkins-master:latest
           ports:
             - containerPort: 8080
