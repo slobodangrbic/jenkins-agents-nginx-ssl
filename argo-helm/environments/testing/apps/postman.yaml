@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: docker
+  name: postman
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,8 +10,8 @@ spec:
   project: default
   source:
     repoURL: https://github.com/slobodangrbic/jenkins-agents-nginx-ssl.git
-    targetRevision: HEAD
-    path: argo-helm/environments/dev/jenkins-docker-slave
+    targetRevision: testing
+    path: argo-helm/environments/dev/jenkins-postman-slave
   destination:
     server: 'https://kubernetes.default.svc'
   syncPolicy:
