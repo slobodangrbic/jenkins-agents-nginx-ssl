@@ -2,21 +2,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: docker-slave
-  namespace: docker
+  namespace: docker-staging
   labels:
-    app: docker
+    app: docker-staging
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: docker
+      app: docker-staging
   template:
     metadata:
       labels:
-        app: docker
+        app: docker-staging
     spec:
       containers:
-        - name: nginx
+        - name: jenkins-staging
           image: slobodang/jenkins-docker-slave:latest
           ports:
             - containerPort: 22
