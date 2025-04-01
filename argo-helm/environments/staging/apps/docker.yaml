@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/slobodangrbic/jenkins-agents-nginx-ssl.git
-    targetRevision: HEAD
+    targetRevision: staging
     path: argo-helm/environments/staging/jenkins-docker-slave
   destination:
     server: 'https://kubernetes.default.svc'
