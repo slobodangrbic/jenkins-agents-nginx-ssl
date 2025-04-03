@@ -42,6 +42,7 @@ pipeline {
                 sh '''
                     serve -s build & 
                     sleep 10
+                    cd learn-jenkins
                     npx playwright test
                 '''
             }
