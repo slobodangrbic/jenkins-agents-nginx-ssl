@@ -25,12 +25,18 @@ pipeline {
             steps {
                 sh '''
                     echo "Running tests..."
-                    cd learn-jenkins
-                    npm test
                     cd build
                     test -f index.html
+                    cd learn-jenkins
+                    npm test
                 '''
             }
+        }
+    }
+    
+    post {
+        always {
+            junit 'learn-jenkins/test-results/junit.xml'
         }
     }
 }
