@@ -24,6 +24,7 @@ pipeline {
             }
             steps {
                 sh '''
+                    echo "Running tests..."
                     cd learn-jenkins
                     npm test
                 '''
