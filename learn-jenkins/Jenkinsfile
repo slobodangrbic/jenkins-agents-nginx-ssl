@@ -3,8 +3,6 @@ pipeline {
 
     stages {
         /*
-
-
         stage('Build') {
             agent {
                 label 'jenkins-docker-slave'
@@ -21,7 +19,7 @@ pipeline {
                 '''
             }
         }
-                */
+        */
         stage('Test') {
             agent {
                 label 'jenkins-docker-slave'
@@ -33,6 +31,19 @@ pipeline {
                     #test -f index.html
                     cd learn-jenkins
                     npm test
+                '''
+            }
+        }
+                stage('E2E') {
+            agent {
+                label 'jenkins-docker-slave'
+            }
+            steps {
+                sh '''
+                    npm install -g playwright
+                    npm install -g serve
+                    serve -s build
+                    npx playwright test
                 '''
             }
         }
