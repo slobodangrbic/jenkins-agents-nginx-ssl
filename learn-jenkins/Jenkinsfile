@@ -37,6 +37,7 @@ pipeline {
                 stage('E2E') {
             agent {
                 label 'jenkins-docker-slave'
+                args '--user jenkins'
             }
             steps {
                 sh '''
