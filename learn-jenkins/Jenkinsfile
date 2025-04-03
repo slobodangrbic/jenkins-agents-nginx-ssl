@@ -18,5 +18,16 @@ pipeline {
                 '''
             }
         }
+        stage('Test') {
+            agent {
+                label 'jenkins-docker-slave'
+            }
+            steps {
+                sh '''
+                    cd learn-jenkins
+                    npm test
+                '''
+            }
+        }
     }
 }
