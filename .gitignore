@@ -17,6 +17,8 @@ node_modules
 
 # production
 /build
+build
+learn-jenkins\build
 
 # misc
 .DS_Store
