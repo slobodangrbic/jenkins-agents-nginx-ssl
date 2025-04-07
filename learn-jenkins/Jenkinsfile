@@ -20,6 +20,37 @@ pipeline {
             }
         }
         */
+        stage('Run Tests'){
+            parallel {
+                stage('Unit Tests') {
+                    agent {
+                        label 'jenkins-docker-slave'
+                    }
+                    steps {
+                        sh '''
+                            echo "Running unit tests..."
+                            cd learn-jenkins
+                            npm test
+                        '''
+                    }
+                }
+                stage('E2E Tests') {
+                    agent {
+                        label 'jenkins-docker-slave'
+                    }
+                    steps {
+                        sh '''
+                    serve -s build & 
+                    sleep 10
+                    cd learn-jenkins
+                    npx playwright install 
+                    npx playwright test
+                        '''
+                    }
+                }
+            }
+        }
+/*
         stage('Test') {
             agent {
                 label 'jenkins-docker-slave'
@@ -49,7 +80,7 @@ pipeline {
             }
         }
     }
-    
+    */
     post {
         always {
             junit 'learn-jenkins/test-results/junit.xml'
