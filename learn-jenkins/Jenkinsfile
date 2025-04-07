@@ -50,6 +50,7 @@ pipeline {
                 }
             }
         }
+    }
 /*
         stage('Test') {
             agent {
