@@ -3,3 +3,5 @@ keys
 nginx.conf
 upgrade.sh
 *.sh
+
+node_modules
